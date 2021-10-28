@@ -59,22 +59,28 @@ app.post('/generatemarksheet',(req,res)=>{
     const python = spawn('python3', ['generate_marksheet.py',res.app.locals.positive,res.app.locals.negative]);
     
     python.stdout.on('data', function (data) {
-        console.log('Pipe data from python script ...');
+        console.log('Hello from generate marksheet endpoint ...');
         res.app.locals.email = data.toString();
     });
     
     python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
         if(code)
+        {
+            console.log(`Error in generating marksheet`);
             res.status(404).send({
                 message : "Error 404! Please check the format of response sheet.",
                 variant : "danger"
             })
+        }
         else
+        {
+            console.log("Marksheet generated succcessfully")
             res.status(200).send({
-                message : "Result sheet prepared succcessfully",
+                message : "Marksheet prepared succcessfully",
                 variant : "success"
             })
+        }
     })
     
 })
@@ -84,22 +90,27 @@ app.post('/generateconcisemarksheet',(req,res)=>{
     const python = spawn('python3', ['generate_concise_marksheet.py']);
     
     python.stdout.on('data', function (data) {
-        console.log('Pipe data from python script ...');
+        console.log('Hello from generate concise marksheet endpoint ...');
         res.app.locals.email = data.toString();
     });
     
     python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
         if(code)
+        {
+            console.log(`Error in generating concise marksheet`);
             res.status(404).send({
                 message : "Error 404! Please check the format of response sheet.",
                 variant : "danger"
             })
+        }
         else
+        {
+            console.log("Concise marksheet generated succcessfully")
             res.status(200).send({
                 message : "Concise marksheet prepared succcessfully",
                 variant : "success"
             })
+        }
     })
 })
 
@@ -108,22 +119,26 @@ app.post('/sendemail',(req,res)=>{
     const python = spawn('python3', ['sendemail.py']);
     
     python.stdout.on('data', function (data) {
-        console.log('Pipe data from python script ...');
-        // res.app.locals.email = data.toString();
+        console.log('From send email endpoint ...');
     });
     
     python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
         if(code)
+        {
+            console.log("Email not sent")
             res.status(404).send({
                 message : "Error 404! Can't send email.",
                 variant : "danger"
             })
+        }
         else
+        {
+            console.log("Email sent successfully")
             res.status(200).send({
                 message : "Email sent succcessfully",
                 variant : "success"
             })
+        }
     })
 })
 
