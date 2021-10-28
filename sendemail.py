@@ -26,7 +26,7 @@ try:
         for data in reader:
             if data[6]=='Roll Number' or data[6]=='ANSWER':
                 continue
-            mail_content = "Dear"+data[3]+""",\n\nCS384 2021 marks are attached for reference.\n\nDr. Mayank"""
+            mail_content = "Dear "+data[3]+""",\nCS384 2021 marks are attached for reference.\n\nDr. Mayank"""
             message = MIMEMultipart()
             message['From'] = sender_email
             message['To'] = data[4].strip()
