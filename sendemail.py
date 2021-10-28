@@ -5,11 +5,11 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 port = 587  # For starttls
-smtp_server = "smtp.gmail.com"
-sender_email = "marks.negatifier.iitp@gmail.com"
-receiver_email = "saurav_1901ee54@iitp.ac.in"
+smtp_server = "stud.iitp.ac.in"
+sender_email = "saurav_1901ee54@iitp.ac.in"
+# receiver_email = "saurav_1901ee54@iitp.ac.in"
 # receiver_email = "sauravkumar0530@gmail.com"
-password = 'Saurav*9113'
+password = '(Saurav*9113)'
 
 # Create a secure SSL context
 context = ssl.create_default_context()
