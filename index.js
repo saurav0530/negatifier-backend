@@ -120,6 +120,7 @@ app.post('/sendemail',(req,res)=>{
     
     python.stdout.on('data', function (data) {
         console.log('From send email endpoint ...');
+        dataToSend = data
     });
     
     python.on('close', (code) => {
@@ -136,7 +137,8 @@ app.post('/sendemail',(req,res)=>{
             console.log("Email sent successfully")
             res.status(200).send({
                 message : "Email sent succcessfully",
-                variant : "success"
+                variant : "success",
+                data : dataToSend.toString()
             })
         }
     })
