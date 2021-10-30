@@ -30,7 +30,7 @@ with open('./input/responses.csv','r') as csvfile:
             server.login(sender_email, password)
             server.send_message(message)
             server.quit()
-        except Exception as e:
+        except:
             print(data[6])
     
 
