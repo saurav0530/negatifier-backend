@@ -18,7 +18,7 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/download/marksheet',(req,res)=>{
-    res.download(__dirname+'/marksheet.zip')
+    res.sendFile(__dirname+'/marksheet.zip')
 })
 
 app.post('/upload',(req,res)=>{

@@ -12,7 +12,7 @@ Img = Img.resize((898,98))
 Img.save('./logo.png')
 
 positive = int(sys.argv[1])
-negative = -1*int(sys.argv[2])
+negative = int(sys.argv[2])
 side = side = Side(style='thin', color='000000')
 thin_border = Border(left=side,right=side,bottom=side,top=side)
 

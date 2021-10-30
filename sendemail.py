@@ -7,9 +7,6 @@ smtp_server = "smtp.gmail.com"
 # password = 'Saurav*9113'
 sender_email = "mail.checker.iitp@gmail.com"
 password = 'Saurav*9113'
-# smtp_server = "stud.iitp.ac.in"
-# sender_email = "saurav_1901ee54@iitp.ac.in"
-# password = '(Saurav*9113)'
 
 try:
     with open('./input/responses.csv','r') as csvfile:
