@@ -18,14 +18,7 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/download/marksheet',(req,res)=>{
-    var execFile = require('child_process').execFile;
-    execFile('zip', ['-r', '-j','marksheet','./output'], function(err, stdout) {
-        if(err){
-            console.log(err);
-            throw err;
-        }
-        res.download(__dirname+'/marksheet.zip')
-    });
+    res.download(__dirname+'/marksheet.zip')
 })
 
 app.post('/upload',(req,res)=>{
