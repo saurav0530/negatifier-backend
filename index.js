@@ -1,4 +1,5 @@
 const express = require('express')
+const uuid = require('uuid')
 const cors = require('cors')
 const fileupload = require("express-fileupload");
 const {spawn} = require('child_process')
@@ -8,7 +9,11 @@ app.use(fileupload());
 app.use(cors())
 app.use(express.json())
 
+// console.log(uuid.v4())
+
 app.get('/',(req,res)=>{
+    var data=req
+    console.log(req)
     res.send('Hello')
 })
 
@@ -88,9 +93,8 @@ app.post('/generatemarksheet',(req,res)=>{
 app.post('/generateconcisemarksheet',(req,res)=>{
     var dataToSend;
     const python = spawn('python3', ['generate_concise_marksheet.py']);
-    
+    console.log('Hello from generate concise marksheet endpoint ...');
     python.stdout.on('data', function (data) {
-        console.log('Hello from generate concise marksheet endpoint ...');
         res.app.locals.email = data.toString();
     });
     
@@ -114,36 +118,60 @@ app.post('/generateconcisemarksheet',(req,res)=>{
     })
 })
 
-app.post('/sendemail',(req,res)=>{
+app.get('/status',(req,res)=>{
+    console.log("Hi from status")
+    if(res.app.locals.status)
+    {
+        res.status(res.app.locals.status.status).send(res.app.locals.status)
+        res.app.locals.status= undefined
+    }
+    else
+    {
+        res.status(202).send({
+            message: "Still processing! Please wait...",
+            variant: 'success',
+            status: 202
+        })
+    }
+})
+
+app.get('/sendemail',(req,res)=>{
     var dataToSend;
-    const python = spawn('python3', ['sendemail.py']);
+    console.log('From send email endpoint ...');
+    res.status(202).send({
+        message: "Request submitted! Processing...",
+        variant: "success"
+    })
     
+    const python = spawn('python3', ['sendemail.py']);
     python.stdout.on('data', function (data) {
-        console.log('From send email endpoint ...');
-        dataToSend = data
+        dataToSend = data.toString()
     });
     
     python.on('close', (code) => {
         if(code)
         {
-            console.log("Email not sent")
-            res.status(404).send({
+            console.log("Email not sent",dataToSend)
+            res.app.locals.status = {
                 message : "Error 404! Can't send email.",
-                variant : "danger"
-            })
+                variant : "danger",
+                data: dataToSend,
+                status: 404
+            }
         }
         else
         {
-            console.log("Email sent successfully")
-            res.status(200).send({
+            console.log("Email sent successfully",dataToSend)
+            res.app.locals.status = {
                 message : "Email sent succcessfully",
                 variant : "success",
-                data : dataToSend.toString()
-            })
+                data : dataToSend,
+                status: 200
+            }
         }
     })
 })
 
 app.listen((process.env.PORT || 4000), ()=>{
-    console.log('Backend started...')
+    console.log(`Backend started at ${(process.env.PORT || 4000)}...`)
 })
