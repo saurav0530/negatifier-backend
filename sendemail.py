@@ -25,13 +25,11 @@ with open('./input/responses.csv','r') as csvfile:
         marksheet = open('./output/'+marksheet_name, 'rb')
         marks = marksheet.read()
         message.add_attachment(marks, maintype='application',subtype='octet-stream', filename=marksheet_name)
+        print(data[6])
         try:
             server = smtplib.SMTP_SSL(smtp_server, port)
             server.login(sender_email, password)
             server.send_message(message)
             server.quit()
-        except:
-            print(data[6])
+        except smtplib.SMTPException as e:
             pass
-    
-
