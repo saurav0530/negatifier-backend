@@ -27,6 +27,7 @@ app.get('/download/marksheet',(req,res)=>{
         res.download(__dirname+'/marksheet.zip')
     });
 })
+
 app.post('/upload',(req,res)=>{
     var master_roll=`./input/master_roll.csv`
     var responses=`./input/responses.csv`
@@ -61,69 +62,99 @@ app.post('/upload',(req,res)=>{
 
 app.post('/generatemarksheet',(req,res)=>{
     var dataToSend;
+    res.status(202).send({
+        message: "Request submitted! Processing...",
+        variant: "success"
+    })
     const python = spawn('python3', ['generate_marksheet.py',res.app.locals.positive,res.app.locals.negative]);
     
     python.stdout.on('data', function (data) {
         console.log('Hello from generate marksheet endpoint ...');
-        res.app.locals.email = data.toString();
+        dataToSend = data.toString();
     });
     
     python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
         if(code)
         {
             console.log(`Error in generating marksheet`);
-            res.status(404).send({
+            res.app.locals.marksheetStatus = {
                 message : "Error 404! Please check the format of response sheet.",
-                variant : "danger"
-            })
+                variant : "danger",
+                data: dataToSend,
+                status: 404
+            }
         }
         else
         {
             console.log("Marksheet generated succcessfully")
-            res.status(200).send({
+            res.app.locals.marksheetStatus = {
                 message : "Marksheet prepared succcessfully",
-                variant : "success"
-            })
+                variant : "success",
+                data: dataToSend,
+                status: 200
+            }
         }
     })
     
 })
+app.get('/generatemarksheet/status',(req,res)=>{
+    console.log("Hi from marksheet status")
+    if(res.app.locals.marksheetStatus)
+    {
+        res.status(res.app.locals.marksheetStatus.status).send(res.app.locals.marksheetStatus)
+        res.app.locals.marksheetStatus= undefined
+    }
+    else
+    {
+        res.status(202).send({
+            message: "Still processing! Please wait...",
+            variant: 'success',
+            status: 202
+        })
+    }
+})
 
 app.post('/generateconcisemarksheet',(req,res)=>{
     var dataToSend;
+    res.status(202).send({
+        message: "Request submitted! Processing...",
+        variant: "success"
+    })
     const python = spawn('python3', ['generate_concise_marksheet.py']);
     console.log('Hello from generate concise marksheet endpoint ...');
     python.stdout.on('data', function (data) {
-        res.app.locals.email = data.toString();
+        dataToSend = data.toString();
     });
     
     python.on('close', (code) => {
         if(code)
         {
             console.log(`Error in generating concise marksheet`);
-            res.status(404).send({
+            res.app.locals.CSmarksheetStatus = {
                 message : "Error 404! Please check the format of response sheet.",
-                variant : "danger"
-            })
+                variant : "danger",
+                data : dataToSend,
+                status: 404
+            }
         }
         else
         {
             console.log("Concise marksheet generated succcessfully")
-            res.status(200).send({
+            res.app.locals.CSmarksheetStatus = {
                 message : "Concise marksheet prepared succcessfully",
-                variant : "success"
-            })
+                variant : "success",
+                data : dataToSend,
+                status: 200
+            }
         }
     })
 })
-
-app.get('/status',(req,res)=>{
-    console.log("Hi from status")
-    if(res.app.locals.status)
+app.get('/generateconcisemarksheet/status',(req,res)=>{
+    console.log("Hi from concise status")
+    if(res.app.locals.CSmarksheetStatus)
     {
-        res.status(res.app.locals.status.status).send(res.app.locals.status)
-        res.app.locals.status= undefined
+        res.status(res.app.locals.CSmarksheetStatus.status).send(res.app.locals.CSmarksheetStatus)
+        res.app.locals.CSmarksheetStatus= undefined
     }
     else
     {
@@ -152,7 +183,7 @@ app.get('/sendemail',(req,res)=>{
         if(code)
         {
             console.log("Email not sent",dataToSend)
-            res.app.locals.status = {
+            res.app.locals.sendemailStatus = {
                 message : "Error 404! Can't send email.",
                 variant : "danger",
                 data: dataToSend,
@@ -162,7 +193,7 @@ app.get('/sendemail',(req,res)=>{
         else
         {
             console.log("Email sent successfully",dataToSend)
-            res.app.locals.status = {
+            res.app.locals.sendemailStatus = {
                 message : "Email sent succcessfully",
                 variant : "success",
                 data : dataToSend,
@@ -170,6 +201,23 @@ app.get('/sendemail',(req,res)=>{
             }
         }
     })
+})
+
+app.get('/sendemail/status',(req,res)=>{
+    console.log("Hi from email status")
+    if(res.app.locals.sendemailStatus)
+    {
+        res.status(res.app.locals.sendemailStatus.status).send(res.app.locals.sendemailStatus)
+        res.app.locals.sendemailStatus= undefined
+    }
+    else
+    {
+        res.status(202).send({
+            message: "Still processing! Please wait...",
+            variant: 'success',
+            status: 202
+        })
+    }
 })
 
 app.listen((process.env.PORT || 4000), ()=>{
