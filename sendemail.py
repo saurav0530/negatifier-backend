@@ -8,6 +8,14 @@ password = 'Saurav*9113'
 # sender_email = "mail.checker.iitp@gmail.com"
 # password = 'Saurav*9113'
 
+def send(message):
+    try:
+        server = smtplib.SMTP_SSL(smtp_server, port)
+        server.login(sender_email, password)
+        server.send_message(message)
+        server.quit()
+    except smtplib.SMTPException as e:
+        pass
 
 with open('./input/responses.csv','r') as csvfile:
     reader = csv.reader(csvfile, delimiter=',', skipinitialspace=True)
@@ -25,11 +33,5 @@ with open('./input/responses.csv','r') as csvfile:
         marksheet = open('./output/'+marksheet_name, 'rb')
         marks = marksheet.read()
         message.add_attachment(marks, maintype='application',subtype='octet-stream', filename=marksheet_name)
+        send(message)
         print(data[6])
-        try:
-            server = smtplib.SMTP_SSL(smtp_server, port)
-            server.login(sender_email, password)
-            server.send_message(message)
-            server.quit()
-        except smtplib.SMTPException as e:
-            pass
