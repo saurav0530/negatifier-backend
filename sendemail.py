@@ -3,10 +3,10 @@ import smtplib, csv
 
 port = 465
 smtp_server = "smtp.gmail.com"
-# sender_email = "marks.negatifier.iitp@gmail.com"
-# password = 'Saurav*9113'
-sender_email = "mail.checker.iitp@gmail.com"
+sender_email = "marks.negatifier.iitp@gmail.com"
 password = 'Saurav*9113'
+# sender_email = "mail.checker.iitp@gmail.com"
+# password = 'Saurav*9113'
 
 
 with open('./input/responses.csv','r') as csvfile:
