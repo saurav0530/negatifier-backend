@@ -32,5 +32,6 @@ with open('./input/responses.csv','r') as csvfile:
             server.quit()
         except:
             print(data[6])
+            pass
     
 
