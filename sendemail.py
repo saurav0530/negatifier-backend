@@ -3,9 +3,9 @@ import smtplib, csv, sys
 
 port = 465
 smtp_server = "smtp.gmail.com"
-sender_email = "marks.negatifier.iitp@gmail.com"
+# sender_email = "marks.negatifier.iitp@gmail.com"
 # password = 'Saurav*9113'
-# sender_email = "mail.checker.iitp@gmail.com"
+sender_email = "mail.checker.iitp@gmail.com"
 password = 'Saurav*9113'
 
 def send(message):
