@@ -63,7 +63,7 @@ app.post('/generatemarksheet',(req,res)=>{
     
     python.stdout.on('data', function (data) {
         console.log('Hello from generate marksheet endpoint ...');
-        dataToSend = data.toString();
+        dataToSend = Number(data.toString());
     });
     
     python.on('close', (code) => {
@@ -159,15 +159,15 @@ app.get('/generateconcisemarksheet/status',(req,res)=>{
     }
 })
 
-app.get('/sendemail',(req,res)=>{
+app.post('/sendemail/:id',(req,res)=>{
     var dataToSend;
-    console.log('From send email endpoint ...');
-    res.status(202).send({
+    console.log('From send email endpoint ...',req.params.id);
+    res.status(200).send({
         message: "Request submitted! Processing...",
         variant: "success"
     })
     
-    const python = spawn('python3', ['sendemail.py']);
+    const python = spawn('python3', ['sendemail.py',req.body.subject,req.body.body,req.body.signature,req.params.id]);
     python.stdout.on('data', function (data) {
         dataToSend = data.toString()
     });
@@ -194,23 +194,6 @@ app.get('/sendemail',(req,res)=>{
             }
         }
     })
-})
-
-app.get('/sendemail/status',(req,res)=>{
-    console.log("Hi from email status")
-    if(res.app.locals.sendemailStatus)
-    {
-        res.status(res.app.locals.sendemailStatus.status).send(res.app.locals.sendemailStatus)
-        res.app.locals.sendemailStatus= undefined
-    }
-    else
-    {
-        res.status(202).send({
-            message: "Still processing! Please wait...",
-            variant: 'success',
-            status: 202
-        })
-    }
 })
 
 app.listen((process.env.PORT || 4000), ()=>{

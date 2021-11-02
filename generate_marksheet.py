@@ -27,7 +27,7 @@ except FileExistsError:
     os.mkdir("./output")
     pass
 
-print("Running")
+response = list()
 
 answers = list()
 with open('./input/responses.csv', 'r') as csvfile:
@@ -204,6 +204,7 @@ def exec_responses():
             if(data[6]=='Roll Number'):
                 continue
             add_marks_to_marksheet(data)
+            response.append(data[6])
 
 
 if(len(answers)==0):
@@ -212,5 +213,4 @@ if(len(answers)==0):
 
 create_marksheet_for_each_student()
 exec_responses()
-
-print('Successful')
+print(len(response))
