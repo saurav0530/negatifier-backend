@@ -116,7 +116,7 @@ app.post('/generateconcisemarksheet',(req,res)=>{
     const python = spawn('python3', ['generate_concise_marksheet.py',res.app.locals.positive,res.app.locals.negative]);
     console.log('Hello from generate concise marksheet endpoint ...');
     python.stdout.on('data', function (data) {
-        dataToSend = data.toString();
+        dataToSend = Number(data.toString());
     });
     
     python.on('close', (code) => {
