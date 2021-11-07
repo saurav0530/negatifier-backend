@@ -12,7 +12,7 @@
 * Run the following commands:
     * ```npm install``` 
     * ```npm start``` 
-* Server will be up at PORT 4000. Server is ready t be used.
+* Server will be up at PORT 4000. Server is ready to be used.
 
 ---
 Developer: 
