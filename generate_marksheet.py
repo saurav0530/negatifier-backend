@@ -11,8 +11,8 @@ Img = PIL.Image.open('./logo.png')
 Img = Img.resize((898,98))
 Img.save('./logo.png')
 
-positive = int(sys.argv[1])
-negative = int(sys.argv[2])
+positive = float(sys.argv[1])
+negative = float(sys.argv[2])
 side = side = Side(style='thin', color='000000')
 thin_border = Border(left=side,right=side,bottom=side,top=side)
 
@@ -186,13 +186,17 @@ def add_marks_to_marksheet(data):
     ws['B10']=correct
     ws['C10']=incorrect
     ws['D10']=left
-    ws['B11']=positive
-    ws['C11']=negative
+    ws['B11']=sys.argv[1]
+    ws['C11']=sys.argv[2]
     ws['D11']=0
-    ws['B12']=ws['B10'].value * ws['B11'].value
-    ws['C12']=ws['C10'].value * ws['C11'].value
+    ws['B12']=ws['B10'].value * float(sys.argv[1])
+    ws['C12']=ws['C10'].value * float(sys.argv[2])
     ws['E10']=correct+incorrect+left
-    ws['E12']=str(ws['B12'].value + ws['C12'].value)+'/'+str(ws['E10'].value * ws['B11'].value)
+    numr = ws['B12'].value + ws['C12'].value
+    numr = (int(numr*100))/100
+    denomr = ws['E10'].value * float(sys.argv[1])
+    denomr = (int(denomr*100))/100
+    ws['E12']=str(numr)+'/'+str(denomr)
     
 
     wb.save('./output/'+data[6]+'.xlsx')
@@ -208,9 +212,8 @@ def exec_responses():
 
 
 if(len(answers)==0):
-    print('No roll number with ANSWER is present, Cannot Process!')
-    exit
-
-create_marksheet_for_each_student()
-exec_responses()
-print(len(response))
+    print('00')
+else:
+    create_marksheet_for_each_student()
+    exec_responses()
+    print(len(response))
