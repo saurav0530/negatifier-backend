@@ -16,16 +16,8 @@ negative = float(sys.argv[2])
 side = side = Side(style='thin', color='000000')
 thin_border = Border(left=side,right=side,bottom=side,top=side)
 
-
 DEFAULT_FONT.name = "Century"
 DEFAULT_FONT.size = 12
-# Checking/Creating output directory
-try:
-    os.mkdir("./output")
-except FileExistsError:
-    shutil.rmtree("./output")
-    os.mkdir("./output")
-    pass
 
 response = list()
 
@@ -216,4 +208,5 @@ if(len(answers)==0):
 else:
     create_marksheet_for_each_student()
     exec_responses()
+    shutil.make_archive('./marksheet','zip','./output')
     print(len(response))

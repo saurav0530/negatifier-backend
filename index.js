@@ -29,27 +29,27 @@ app.post('/upload',(req,res)=>{
     req.files.master_roll.mv(master_roll, err =>{
         if(err)
         {
-            console.log(err)
-            res.status(200).send({
-                message : "Unexpected error while uploading",
-                variant : "danzer"
-            })
+            console.log("Unexpected error while uploading")
         }
         
     })
     req.files.responses.mv(responses, err =>{
         if(err)
         {
-            console.log(err)
-            res.status(200).send({
-                message : "Unexpected error while uploading",
-                variant : "danzer"
-            })
+            console.log("Unexpected error while uploading")
         }
     })
-    res.status(200).send({
-        message : "Files uploaded successfully",
-        variant : "success"
+    const python = spawn('python3', ['make_dir.py']);
+    console.log('Hello from generate upload endpoint ...');
+    python.stdout.on('data',(data)=>{
+        console.log(data.toString())
+    });
+    
+    python.on('close', (code) => {
+        res.status(200).send({
+            message : "Files uploaded successfully",
+            variant : "success"
+        })
     })
 })
 
