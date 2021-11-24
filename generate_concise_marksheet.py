@@ -49,7 +49,7 @@ try:
                     data.insert(6,str(total)+"/"+str(total_marks))
                     data.insert(len(data),'['+str(correct)+','+str(incorrect)+','+str(unattempted)+']')
                     writer_obj.writerow(data)
-            
+            # Adding absent candidate data to concise marksheet
             with open('./input/master_roll.csv', 'r') as file:
                 reader = csv.reader(file, delimiter=',', skipinitialspace=True)
                 for data in reader:
