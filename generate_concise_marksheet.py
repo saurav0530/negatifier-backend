@@ -2,6 +2,8 @@ import csv, shutil,sys
 
 try:
     answer = []
+    student = dict()
+    
     with open('./input/responses.csv','r') as csvfile:
         reader = csv.reader(csvfile, delimiter=',', skipinitialspace=True)
         for data in reader:
@@ -17,6 +19,7 @@ try:
                 reader = csv.reader(csvfile, delimiter=',', skipinitialspace=True)
                 for data in reader:
                     roll = data[6]
+                    student[roll]=1                                     # Marking attendance
                     if(roll=='Roll Number'):
                         for i in range(7,len(data)):
                             data[i]="Unnamed: "+str(i)
@@ -46,7 +49,24 @@ try:
                     data.insert(6,str(total)+"/"+str(total_marks))
                     data.insert(len(data),'['+str(correct)+','+str(incorrect)+','+str(unattempted)+']')
                     writer_obj.writerow(data)
+            
+            with open('./input/master_roll.csv', 'r') as file:
+                reader = csv.reader(file, delimiter=',', skipinitialspace=True)
+                for data in reader:
+                    if data[0]=="roll":
+                        continue
+                    try:
+                        if student[data[0]]:
+                            continue
+                    except:
+                        for i in range(len(answer)):
+                            answer[i] = "..."
+                        answer[0]="ABSENT"
+                        answer[3]=data[1]
+                        answer[7]=data[0]
+                        writer_obj.writerow(answer)
             file.close()
+        
         shutil.make_archive('./marksheet','zip','./output')
 except Exception as e:
     print(e)
