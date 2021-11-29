@@ -38,7 +38,7 @@ def create_marksheet_for_each_student():
 
             wb = Workbook()
             ws = wb['Sheet']
-            ws.title = 'quiz'
+            ws.title = sys.argv[3]
 
             ws.merge_cells('A5:E5')
             ws.merge_cells('A1:E4')
@@ -60,7 +60,7 @@ def create_marksheet_for_each_student():
             ws['D6'] = 'Exam: '
             ws['A7'] = 'Roll Number: '
             ws['B6'] = data[1]
-            ws['E6'] = 'Quiz'
+            ws['E6'] = sys.argv[3]
             ws['B7'] = data[0]
             ws['B9'] = 'Right'
             ws['C9'] = 'Wrong'
@@ -69,6 +69,8 @@ def create_marksheet_for_each_student():
             ws['A10'] = 'No.'
             ws['A11'] = 'Marking'
             ws['A12'] = 'Total'
+            ws['B11']=sys.argv[1]
+            ws['C11']=sys.argv[2]
             
             cells = ['B9','C9','D9','E9','A10','A11','A12','A9']
             for a in cells:
@@ -147,7 +149,7 @@ def create_marksheet_for_each_student():
 
 def add_marks_to_marksheet(data):
     wb = load_workbook('./output/'+data[6]+'.xlsx')
-    ws = wb['quiz']
+    ws = wb[sys.argv[3]]
     
     correct=0
     incorrect=0

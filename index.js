@@ -24,8 +24,6 @@ app.get('/download/marksheet',(req,res)=>{
 app.post('/upload',(req,res)=>{
     var master_roll=`./input/master_roll.csv`
     var responses=`./input/responses.csv`
-    res.app.locals.positive = req.body.positive
-    res.app.locals.negative = req.body.negative
     req.files.master_roll.mv(master_roll, err =>{
         if(err)
         {
@@ -59,7 +57,7 @@ app.post('/generatemarksheet',(req,res)=>{
         message: "Request submitted! Processing...",
         variant: "success"
     })
-    const python = spawn('python3', ['generate_marksheet.py',res.app.locals.positive,res.app.locals.negative]);
+    const python = spawn('python3', ['generate_marksheet.py',req.body.positive,req.body.negative,req.body.name]);
     
     python.stdout.on('data', function (data) {
         console.log('Hello from generate marksheet endpoint ...');
