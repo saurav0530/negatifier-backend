@@ -111,7 +111,7 @@ app.post('/generateconcisemarksheet',(req,res)=>{
         message: "Request submitted! Processing...",
         variant: "success"
     })
-    const python = spawn('python3', ['generate_concise_marksheet.py',res.app.locals.positive,res.app.locals.negative]);
+    const python = spawn('python3', ['generate_concise_marksheet.py',req.body.positive,req.body.negative]);
     console.log('Hello from generate concise marksheet endpoint ...');
     python.stdout.on('data', function (data) {
         dataToSend = Number(data.toString());
