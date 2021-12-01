@@ -44,8 +44,10 @@ try:
                     total = positive+negative
                     total_marks = float(sys.argv[1])*(correct+incorrect+unattempted)
                     total = float(int(total*100))/100
+                    total_positive = float(int(positive*100))/100
                     total_marks = float(int(total_marks*100))/100
 
+                    data[2] = str(total_positive)+"/"+str(total_marks)
                     data.insert(6,str(total)+"/"+str(total_marks))
                     data.insert(len(data),'['+str(correct)+','+str(incorrect)+','+str(unattempted)+']')
                     writer_obj.writerow(data)
