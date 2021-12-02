@@ -64,6 +64,8 @@ try:
                         for i in range(len(answer)):
                             answer[i] = "..."
                         answer[0]="ABSENT"
+                        answer[2]="ABSENT"
+                        answer[6]="ABSENT"
                         answer[3]=data[1]
                         answer[7]=data[0]
                         writer_obj.writerow(answer)
